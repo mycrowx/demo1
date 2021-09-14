@@ -42,9 +42,7 @@ public class CategoryService implements ICategoryService {
 	public CategoryDTO insert(CategoryDTO category) {
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-		CategoryEntity categoryEntity = modelMapper.map(category, CategoryEntity.class);
-
-		categoryEntity = repository.save(categoryEntity);
+		CategoryEntity categoryEntity = repository.save(modelMapper.map(category, CategoryEntity.class));
 
 		return modelMapper.map(categoryEntity, CategoryDTO.class);
 	}
