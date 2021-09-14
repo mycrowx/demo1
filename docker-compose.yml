@@ -35,4 +35,5 @@ services:
       - demo1-config
       - demo1-postgres
     <<: *spring-config
+    command: bash -c "./wait-for-it.sh demo1-config:8011 && ./wait-for-it.sh demo2-postgres:5432 -- java -jar user.jar"
     container_name: demo1-user
