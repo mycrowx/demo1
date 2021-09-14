@@ -1,6 +1,6 @@
 FROM openjdk:11-jre-slim
 COPY target/user-0.0.1-SNAPSHOT.jar user.jar
-RUN apt-get update
+RUN apt-get update; apt-get install -y curl netcat
 ADD entrypoint.sh entrypoint.sh
 CMD [ "entrypoint.sh" ]
 ENTRYPOINT ["sh"]
