@@ -25,9 +25,9 @@ public class MovieController {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		MovieDTO movieDTO = modelMapper.map(movieRequest, MovieDTO.class);
 
-//		CategoryDTO categoryDTO = new CategoryDTO();
-//		categoryDTO.setId(movieRequest.getCategoryId());
-//		movieDTO.setCategory(categoryDTO);
+		CategoryDTO categoryDTO = new CategoryDTO();
+		categoryDTO.setId(movieRequest.getCategoryId());
+		movieDTO.setCategory(categoryDTO);
 
 		movieDTO = service.insert(movieDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(movieDTO);

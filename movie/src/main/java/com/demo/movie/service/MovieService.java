@@ -23,38 +23,27 @@ public class MovieService implements IMovieService {
 
 		ModelMapper modelMapper = new ModelMapper();
 
-		List<MovieDTO> moviesDTO = movies
+		return movies
 				.stream()
 				.map(movie -> modelMapper.map(movie, MovieDTO.class))
 				.collect(Collectors.toList());
-
-		return moviesDTO;
 	}
 
 	@Override
 	public MovieDTO findById(Long id) {
 		MovieEntity movie = repository.findById(id).orElse(null);
+		if(movie == null) return null;
 
-		if(movie == null)
-			return null;
-
-		MovieDTO movieDTO = new ModelMapper().map(movie, MovieDTO.class);
-
-		return movieDTO;
+		return new ModelMapper().map(movie, MovieDTO.class);
 	}
 
 	@Override
 	public MovieDTO insert(MovieDTO movie) {
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+		MovieEntity movieEntity = repository.save(modelMapper.map(movie, MovieEntity.class));
 
-		MovieEntity movieEntity = modelMapper.map(movie, MovieEntity.class);
-
-		movieEntity = repository.save(movieEntity);
-
-		movie = modelMapper.map(movieEntity, MovieDTO.class);
-
-		return movie;
+		return modelMapper.map(movieEntity, MovieDTO.class);
 	}
 
 	@Override
