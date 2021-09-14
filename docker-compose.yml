@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  demo1-postgres:
+    image: postgres:12-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 123
+      POSTGRES_USER: user
+      POSTGRES_DB: demo1
+    container_name: demo1-postgres
+
+  demo1-user:
+    build:
+      context: ./user
+      dockerfile: ./Dockerfile
+    image: demo1-user
+    ports:
+      - 8010:8010
+    depends_on:
+      - demo1-postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://demo1-postgres:5432/demo1
+    container_name: demo1-user
