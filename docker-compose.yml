@@ -1,5 +1,9 @@
 version: "3.8"
 
+x-config-server: &spring-config
+  environment:
+    - SPRING_CLOUD_CONFIG_URI=http://demo1-config:8011
+
 services:
   demo1-config:
     build:
@@ -28,8 +32,7 @@ services:
     ports:
       - 8010:8010
     depends_on:
-      - demo1-postgres
       - demo1-config
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://demo1-postgres:5432/demo1
+      - demo1-postgres
+    <<: *spring-config
     container_name: demo1-user
