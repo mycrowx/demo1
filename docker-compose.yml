@@ -1,6 +1,15 @@
 version: "3.8"
 
 services:
+  demo1-config:
+    build:
+      context: ./config
+      dockerfile: ./Dockerfile
+    image: demo1-config
+    ports:
+      - 8011:8011
+    container_name: demo1-config
+
   demo1-postgres:
     image: postgres:12-alpine
     ports:
@@ -20,6 +29,7 @@ services:
       - 8010:8010
     depends_on:
       - demo1-postgres
+      - demo1-config
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://demo1-postgres:5432/demo1
     container_name: demo1-user
