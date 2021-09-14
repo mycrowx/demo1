@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class MovieDTO {
 	private Long id;
 	private String title;
-//	@JsonBackReference
-//	private CategoryDTO category;
+	@JsonBackReference
+	private CategoryDTO category;
 
 	public MovieDTO() {
 	}
@@ -27,11 +27,20 @@ public class MovieDTO {
 		this.title = title;
 	}
 
-//	public CategoryDTO getCategory() {
-//		return category;
-//	}
-//
-//	public void setCategory(CategoryDTO category) {
-//		this.category = category;
-//	}
+	public CategoryDTO getCategory() {
+		return category;
+	}
+
+	public void setCategory(CategoryDTO category) {
+		this.category = category;
+	}
+
+	@Override
+	public String toString() {
+		return "MovieDTO{" +
+				"id=" + id +
+				", title='" + title + '\'' +
+				", category=" + category.getName() +
+				'}';
+	}
 }

@@ -17,10 +17,10 @@ public class MovieEntity implements Serializable {
 	@Column(name = "title", nullable = false, length = 50)
 	private String title;
 
-//	@JsonBackReference
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "category_id")
-//	private CategoryEntity category;
+	@JsonBackReference
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "category_id")
+	private CategoryEntity category;
 
 	public MovieEntity() {
 	}
@@ -41,20 +41,20 @@ public class MovieEntity implements Serializable {
 		this.title = title;
 	}
 
-//	public CategoryEntity getCategory() {
-//		return category;
-//	}
-//
-//	public void setCategory(CategoryEntity category) {
-//		this.category = category;
-//	}
+	public CategoryEntity getCategory() {
+		return category;
+	}
+
+	public void setCategory(CategoryEntity category) {
+		this.category = category;
+	}
 
 	@Override
 	public String toString() {
 		return "MovieEntity{" +
 				"id=" + id +
 				", title='" + title + '\'' +
-//				", category=" + category +
+				", category=" + category.toString() +
 				'}';
 	}
 }
