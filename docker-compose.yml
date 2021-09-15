@@ -13,6 +13,7 @@ services:
     ports:
       - 8011:8011
     container_name: demo1-config
+    # command: bash -c "jar -xf config.jar && java -cp BOOT-INF/classes:BOOT-INF/lib/* com.example.MyApplication"
 
   demo1-postgres:
     image: postgres:12-alpine
