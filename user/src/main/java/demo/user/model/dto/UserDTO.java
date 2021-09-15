@@ -2,8 +2,9 @@ package demo.user.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import java.io.Serializable;
 
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     private Long id;
     private String username;

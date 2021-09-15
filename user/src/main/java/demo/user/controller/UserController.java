@@ -5,6 +5,7 @@ import demo.user.model.dto.UserDTO;
 import demo.user.model.request.UserCreateUserRequest;
 import demo.user.service.IUserService;
 import java.util.List;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "user")
+@RequestMapping(path = "/user")
 public class UserController {
 
     private IUserService service;
@@ -28,7 +29,14 @@ public class UserController {
         this.mapper = mapper;
     }
 
-    @PostMapping
+    @PostMapping(
+        consumes = {
+            MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE,
+        },
+        produces = {
+            MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE,
+        }
+    )
     public void createUser(
         @RequestBody UserCreateUserRequest createUserRequest
     ) {
@@ -37,7 +45,12 @@ public class UserController {
         service.createUser(userDTO);
     }
 
-    @GetMapping(path = "/{userId}")
+    @GetMapping(
+        path = "/{userId}",
+        produces = {
+            MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE,
+        }
+    )
     public UserDTO getUserById(@PathVariable Long userId) {
         return service.getUserById(userId);
     }

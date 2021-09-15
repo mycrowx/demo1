@@ -30,7 +30,7 @@ services:
       dockerfile: ./Dockerfile
     image: demo1-user
     ports:
-      - 8010
+      - 8010:8010
     depends_on:
       - demo1-config
       - demo1-postgres
