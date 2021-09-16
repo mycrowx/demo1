@@ -3,6 +3,7 @@ package com.demo.movie.controller;
 import com.demo.movie.model.dto.CategoryDTO;
 import com.demo.movie.model.dto.MovieDTO;
 import com.demo.movie.model.request.MovieCreateRequest;
+import com.demo.movie.model.request.MovieUpdateRequest;
 import com.demo.movie.service.IMovieService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -43,6 +44,23 @@ public class MovieController {
 	public ResponseEntity<List<MovieDTO>> getAll() {
 		List<MovieDTO> movies = service.getAll();
 		return ResponseEntity.status(HttpStatus.OK).body(movies);
+	}
+
+	@PutMapping
+	public ResponseEntity<MovieDTO> update(@RequestBody MovieUpdateRequest movieRequest) {
+		if(service.findById(movieRequest.getId()) == null)
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+		MovieDTO movieDTO = modelMapper.map(movieRequest, MovieDTO.class);
+
+		CategoryDTO categoryDTO = new CategoryDTO();
+		categoryDTO.setId(movieRequest.getCategoryId());
+		movieDTO.setCategory(categoryDTO);
+
+		movieDTO = service.update(movieDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).body(movieDTO);
 	}
 
 	@DeleteMapping(path = "/{movieId}")

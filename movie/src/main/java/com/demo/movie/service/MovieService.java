@@ -47,6 +47,15 @@ public class MovieService implements IMovieService {
 	}
 
 	@Override
+	public MovieDTO update(MovieDTO movie) {
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+		MovieEntity movieEntity = repository.save(modelMapper.map(movie, MovieEntity.class));
+
+		return modelMapper.map(movieEntity, MovieDTO.class);
+	}
+
+	@Override
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}

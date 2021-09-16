@@ -14,4 +14,6 @@ public interface IMovieService {
 	void delete(Long id);
 
 	MovieDTO findById(Long movieId);
+
+	MovieDTO update(MovieDTO movie);
 }
