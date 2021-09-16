@@ -25,6 +25,15 @@ services:
       POSTGRES_DB: demo1
     container_name: demo1-postgres
 
+  demo1-rabbitmq:
+    image: rabbitmq:3.9-management-alpine
+    container_name: demo1-rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    # networks:
+    #   - rabbitmq_go_net
+
   demo1-user:
     build:
       context: ./user

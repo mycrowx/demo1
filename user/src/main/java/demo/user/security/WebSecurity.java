@@ -38,6 +38,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/user/**")
             .permitAll()
+            .antMatchers("/actuator/**")
+            .permitAll()
             // .antMatchers(HttpMethod.POST, "/user")
             // .permitAll()
             // .antMatchers(HttpMethod.POST, "/user/login")
