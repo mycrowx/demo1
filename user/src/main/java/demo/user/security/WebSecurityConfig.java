@@ -7,13 +7,14 @@ import org.springframework.core.env.Environment;
 // import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurity extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private IUserService userService;
 
@@ -21,7 +22,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     private BCryptPasswordEncoder encoder;
 
-    public WebSecurity(
+    public WebSecurityConfig(
         IUserService userService,
         Environment env,
         BCryptPasswordEncoder encoder
@@ -32,18 +33,17 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/actuator/**");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http
             .authorizeRequests()
             .antMatchers("/user/**")
             .permitAll()
-            .antMatchers("/actuator/**")
-            .permitAll()
-            // .antMatchers(HttpMethod.POST, "/user")
-            // .permitAll()
-            // .antMatchers(HttpMethod.POST, "/user/login")
-            // .permitAll()
             .anyRequest()
             .authenticated()
             .and()
