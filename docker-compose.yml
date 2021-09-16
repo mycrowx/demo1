@@ -45,5 +45,62 @@ services:
       - demo1-config
       - demo1-postgres
     <<: *spring-config
-    command: bash -c "./wait-for-it.sh demo1-config:8011 && ./wait-for-it.sh demo2-postgres:5432 -- java -jar user.jar"
-    # container_name: demo1-user
+    command: bash -c "./wait-for-it.sh demo1-config:8011 && ./wait-for-it.sh demo1-postgres:5432 -- java -jar user.jar"
+
+  demo1-discovery:
+    build:
+      context: ./service-discovery
+      dockerfile: ./Dockerfile
+    image: demo1-discovery
+    ports:
+      - 9999:9999
+    # depends_on:
+    #   - demo1-config
+    #   - demo1-postgres
+    # <<: *spring-config
+    # command: bash -c "./wait-for-it.sh demo1-config:8011 && ./wait-for-it.sh demo2-postgres:5432 -- java -jar user.jar"
+    command: bash -c "java -jar discovery.jar"
+    container_name: demo1-discovery
+
+  demo1-category:
+    build:
+      context: ./category
+      dockerfile: ./Dockerfile
+    image: demo1-category
+    ports:
+      - 8081:8081
+    depends_on:
+      - demo1-postgres
+      - demo1-discovery
+      # - demo1-postgres
+    # <<: *spring-config
+    command: bash -c "./wait-for-it.sh demo1-postgres:5432 && ./wait-for-it.sh demo1-discovery:9999 -- java -jar category.jar"
+    container_name: demo1-category
+
+  demo1-gateway:
+    build:
+      context: ./gateway
+      dockerfile: ./Dockerfile
+    image: demo1-gateway
+    ports:
+      - 9000:9000
+    depends_on:
+      - demo1-discovery
+        # - demo1-postgres
+        # <<: *spring-config
+    command: bash -c "./wait-for-it.sh demo1-discovery:9999 -- java -jar gateway.jar"
+    container_name: demo1-gateway
+
+  demo1-movie:
+    build:
+      context: ./movie
+      dockerfile: ./Dockerfile
+    image: demo1-movie
+    ports:
+      - 8080:8080
+    depends_on:
+      - demo1-discovery
+      - demo1-category
+    # <<: *spring-config
+    command: bash -c "./wait-for-it.sh demo1-category:8081 -- java -jar movie.jar"
+    container_name: demo1-movie
