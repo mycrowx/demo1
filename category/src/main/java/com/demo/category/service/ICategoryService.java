@@ -15,4 +15,6 @@ public interface ICategoryService {
 	void delete(Long id);
 
 	CategoryDTO  findById(Long categoryId);
+
+	CategoryDTO update(CategoryDTO category);
 }

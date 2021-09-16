@@ -48,6 +48,17 @@ public class CategoryService implements ICategoryService {
 	}
 
 	@Override
+	public CategoryDTO update(CategoryDTO category) {
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+		CategoryEntity categoryEntity = modelMapper.map(category, CategoryEntity.class);
+		categoryEntity = repository.save(categoryEntity);
+
+		return modelMapper.map(categoryEntity, CategoryDTO.class);
+	}
+
+	@Override
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}

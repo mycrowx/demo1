@@ -2,6 +2,7 @@ package com.demo.category.controller;
 
 import com.demo.category.model.dto.CategoryDTO;
 import com.demo.category.model.request.CategoryCreateRequest;
+import com.demo.category.model.request.CategoryUpdateRequest;
 import com.demo.category.service.ICategoryService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -39,6 +40,18 @@ public class CategoryController {
 	public ResponseEntity<List<CategoryDTO>> getAll() {
 		List<CategoryDTO> categories = service.getAll();
 		return ResponseEntity.status(HttpStatus.OK).body(categories);
+	}
+
+	@PutMapping
+	public ResponseEntity<CategoryDTO> update(@RequestBody CategoryUpdateRequest categoryRequest) {
+		if(service.findById(categoryRequest.getId()) == null)
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+		CategoryDTO categoryDTO = service.update(modelMapper.map(categoryRequest, CategoryDTO.class));
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(categoryDTO);
 	}
 
 	@DeleteMapping(path = "/{categoryId}")
