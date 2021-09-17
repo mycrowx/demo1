@@ -74,17 +74,21 @@ curl -v -X POST "http://localhost:8011/monitor" \
     -d '{"push": {"changes": []} }'
 ```
 
-### User
+### User (Spring Boot)
 
 localhost:8010/user
 
-### Movie
+### Movie (Spring Boot)
 
 localhost:8080/movie
 
-### Category
+### Category (Spring Boot)
 
 localhost:8081/category
+
+### Python (Fast API)
+
+localhost:8012/hello-user
 
 ### Tracing (Jaeger)
 
