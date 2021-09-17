@@ -15,12 +15,9 @@ public class DataSeedingConfig {
 
     @EventListener
     public void handleContextRefresh(ContextRefreshedEvent event) {
-        if (repository.findById(1L) == null) {
-            CategoryEntity categoryEntity = new CategoryEntity();
-            categoryEntity.setName("Comedy");
-            categoryEntity.setMovies(null);
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setName("Comedy");
 
-            repository.save(categoryEntity);
-        }
+        repository.save(categoryEntity);
     }
 }

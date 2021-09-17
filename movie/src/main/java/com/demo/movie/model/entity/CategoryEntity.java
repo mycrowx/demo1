@@ -36,15 +36,6 @@ public class CategoryEntity {
 
     public CategoryEntity() {}
 
-    /**
-     * @param name
-     * @param movies
-     */
-    public CategoryEntity(String name, List<MovieEntity> movies) {
-        this.name = name;
-        this.movies = movies;
-    }
-
     public Long getId() {
         return id;
     }
