@@ -40,28 +40,28 @@ http GET localhost:9000/user/user
 
 ### Gateway (Zuul)
 
-localhost:9000
-localhost:9000/actuator/\*
-localhost:9000/user/user
-localhost:9000/user/user/login
-localhost:9000/movie/movie
-localhost:9000/category/category
+- localhost:9000
+- localhost:9000/actuator/\*
+- localhost:9000/user/user
+- localhost:9000/user/user/login
+- localhost:9000/movie/movie
+- localhost:9000/category/category
 
 ### Service-discovery (Eureka)
 
-localhost:9999/eureka
+- localhost:9999/eureka
 
 ### Config (Spring Cloud Config)
 
-localhost:8011
-localhost:8011/user/dev
-localhost:8011/user/prod
-localhost:8011/movie/dev
-localhost:8011/movie/prod
-localhost:8011/category/dev
-localhost:8011/category/prod
-localhost:8011/gateway/dev
-localhost:8011/gateway/prod
+- localhost:8011
+- localhost:8011/user/dev
+- localhost:8011/user/prod
+- localhost:8011/movie/dev
+- localhost:8011/movie/prod
+- localhost:8011/category/dev
+- localhost:8011/category/prod
+- localhost:8011/gateway/dev
+- localhost:8011/gateway/prod
 
 Configuration can be updated by webhook and send to service by RabbitMQ.
 However, webhook doesn't trust localhost so we can use Curl instead.
@@ -74,26 +74,30 @@ curl -v -X POST "http://localhost:8011/monitor" \
     -d '{"push": {"changes": []} }'
 ```
 
-### User
+### User (Spring Boot)
 
-localhost:8010/user
+- localhost:8010/user
 
-### Movie
+### Movie (Spring Boot)
 
-localhost:8080/movie
+- localhost:8080/movie
 
-### Category
+### Category (Spring Boot)
 
-localhost:8081/category
+- localhost:8081/category
+
+### Python (Fast API)
+
+- localhost:8012/hello-user
 
 ### Tracing (Jaeger)
 
-localhost:9091
+- localhost:9091
 
 ### Monitoring (Prometheus)
 
-localhost:9090
+- localhost:9090
 
 ### Message Queue (Spring Cloud Bus + RabbitMQ)
 
-localhost:15672
+- localhost:15672
