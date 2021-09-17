@@ -50,18 +50,18 @@ services:
       POSTGRES_DB: demo1
     container_name: demo1-postgres
 
-  # demo1-user:
-  #   build:
-  #     context: ./user
-  #     dockerfile: ./Dockerfile
-  #   image: demo1-user
-  #   ports:
-  #     - 8010:8010
-  #   depends_on:
-  #     - demo1-config
-  #     - demo1-postgres
-  #   <<: *spring-config
-  #   command: bash -c "./wait-for-it.sh demo1-config:8011 && ./wait-for-it.sh demo1-postgres:5432 -- java -jar user.jar"
+  demo1-user:
+    build:
+      context: ./user
+      dockerfile: ./Dockerfile
+    image: demo1-user
+    ports:
+      - 8010:8010
+    depends_on:
+      - demo1-config
+      - demo1-postgres
+    <<: *spring-config
+    command: bash -c "./wait-for-it.sh demo1-config:8011 && ./wait-for-it.sh demo1-postgres:5432 -- java -jar user.jar"
 
   demo1-category:
     build:

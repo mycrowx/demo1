@@ -43,8 +43,16 @@ services:
   demo1-tracing:
     image: jaegertracing/all-in-one:1.26
     ports:
-      - 9090:16686
+      - 9091:16686
     container_name: demo1-tracing
+
+  demo1-prometheus:
+    image: prom/prometheus:v2.30.0
+    ports:
+      - 9090:9090
+    volumes:
+      - /home/nguyenhoangnam/.local/share/java/demo1/prometheus.yml:/etc/prometheus/prometheus.yml
+    container_name: demo1-prometheus
 
   demo1-postgres:
     image: postgres:12-alpine
