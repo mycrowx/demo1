@@ -1,60 +1,86 @@
 package com.demo.movie.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "category")
 public class CategoryEntity {
-	@Id
-	@SequenceGenerator(name = "category_id_seq_gen", sequenceName = "category_id_seq", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_id_seq_gen")
-	@Column(name = "id", updatable = false)
-	private Long id;
 
-	@Column(name = "name", nullable = false, length = 50)
-	private String name;
+    @Id
+    @SequenceGenerator(
+        name = "category_id_seq_gen",
+        sequenceName = "category_id_seq",
+        allocationSize = 1
+    )
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "category_id_seq_gen"
+    )
+    @Column(name = "id", updatable = false)
+    private Long id;
 
-	@JsonManagedReference
-	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-	private List<MovieEntity> movies = new ArrayList<MovieEntity>();
+    @Column(name = "name", nullable = false, length = 50)
+    private String name;
 
-	public CategoryEntity() {
-	}
+    @JsonManagedReference
+    @OneToMany(
+        mappedBy = "category",
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.REMOVE,
+        orphanRemoval = true
+    )
+    private List<MovieEntity> movies = new ArrayList<MovieEntity>();
 
-	public Long getId() {
-		return id;
-	}
+    public CategoryEntity() {}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    /**
+     * @param name
+     * @param movies
+     */
+    public CategoryEntity(String name, List<MovieEntity> movies) {
+        this.name = name;
+        this.movies = movies;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public List<MovieEntity> getMovies() {
-		return movies;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setMovies(List<MovieEntity> movies) {
-		this.movies = movies;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public String toString() {
-		return "CategoryEntity{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", movies=" + movies +
-				'}';
-	}
+    public List<MovieEntity> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(List<MovieEntity> movies) {
+        this.movies = movies;
+    }
+
+    @Override
+    public String toString() {
+        return (
+            "CategoryEntity{" +
+            "id=" +
+            id +
+            ", name='" +
+            name +
+            '\'' +
+            ", movies=" +
+            movies +
+            '}'
+        );
+    }
 }
