@@ -1,0 +1,126 @@
+version: "3.8"
+
+x-config-server: &spring-config
+  environment:
+    - SPRING_CLOUD_CONFIG_URI=http://demo1-config:8011
+    - SPRING_CONFIG_IMPORT=configserver:http://demo1-config:8011
+    - SPRING_PROFILES_ACTIVE=prod
+
+services:
+  demo1-config:
+    build:
+      context: ./config
+      dockerfile: ./Dockerfile
+    image: demo1-config
+    ports:
+      - 8011:8011
+    container_name: demo1-config
+
+  demo1-discovery:
+    build:
+      context: ./service-discovery
+      dockerfile: ./Dockerfile
+    image: demo1-discovery
+    ports:
+      - 9999:9999
+    command: bash -c "java -jar discovery.jar"
+    container_name: demo1-discovery
+
+  demo1-gateway:
+    build:
+      context: ./gateway
+      dockerfile: ./Dockerfile
+    image: demo1-gateway
+    ports:
+      - 9000:9000
+    depends_on:
+      - demo1-discovery
+      - demo1-postgres
+    <<: *spring-config
+    command: ./wait-for-it.sh demo1-discovery:9999 -- java -jar gateway.jar
+    container_name: demo1-gateway
+
+  demo1-tracing:
+    image: jaegertracing/all-in-one:1.26
+    ports:
+      - 9091:16686
+    container_name: demo1-tracing
+
+  demo1-prometheus:
+    image: prom/prometheus:v2.30.0
+    ports:
+      - 9090:9090
+    volumes:
+      - /home/nguyenhoangnam/.local/share/java/demo1/prometheus.yml:/etc/prometheus/prometheus.yml
+    container_name: demo1-prometheus
+
+  demo1-postgres:
+    image: postgres:12-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 123
+      POSTGRES_USER: user
+      POSTGRES_DB: demo1
+    container_name: demo1-postgres
+
+  demo1-rabbitmq:
+    image: rabbitmq:3.9-management-alpine
+    container_name: demo1-rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  # demo1-user:
+  #   build:
+  #     context: ./user
+  #     dockerfile: ./Dockerfile
+  #   image: demo1-user
+  #   ports:
+  #     - 8010:8010
+  #   depends_on:
+  #     - demo1-config
+  #     - demo1-postgres
+  #   <<: *spring-config
+  #   command: bash -c "./wait-for-it.sh demo1-config:8011 && ./wait-for-it.sh demo1-postgres:5432 -- java -jar user.jar"
+
+  demo1-category:
+    build:
+      context: ./category
+      dockerfile: ./Dockerfile
+    image: demo1-category
+    ports:
+      - 8081:8081
+    depends_on:
+      - demo1-config
+      - demo1-postgres
+    <<: *spring-config
+    command: bash -c "./wait-for-it.sh demo1-config:8011 && ./wait-for-it.sh demo1-postgres:5432 -- java -jar category.jar"
+    # command: bash -c "./wait-for-it.sh demo1-postgres:5432 && ./wait-for-it.sh demo1-discovery:9999 -- java -jar category.jar"
+    container_name: demo1-category
+
+  demo1-movie:
+    build:
+      context: ./movie
+      dockerfile: ./Dockerfile
+    image: demo1-movie
+    ports:
+      - 8080:8080
+    depends_on:
+      - demo1-discovery
+      - demo1-category
+    <<: *spring-config
+    command: ./wait-for-it.sh demo1-category:8081 -- java -jar movie.jar
+    container_name: demo1-movie
+
+  # demo1-python:
+  #   build:
+  #     context: ./python
+  #     dockerfile: ./Dockerfile
+  #   image: demo1-python
+  #   ports:
+  #     - 8012:8012
+  #   depends_on:
+  #     - demo1-discovery
+  #   command: python main.py
+  #   container_name: demo1-python
