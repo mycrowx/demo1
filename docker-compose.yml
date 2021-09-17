@@ -91,6 +91,26 @@ services:
     command: bash -c "./wait-for-it.sh demo1-discovery:9999 -- java -jar gateway.jar"
     container_name: demo1-gateway
 
+  demo1-tracing:
+    image: jaegertracing/all-in-one:1.26
+    ports:
+      - 9090:16686
+    container_name: demo1-tracing
+
+  demo1-python:
+    build:
+      context: ./python
+      dockerfile: ./Dockerfile
+    image: demo1-python
+    ports:
+      - 8012:8012
+    depends_on:
+      - demo1-discovery
+        # - demo1-postgres
+        # <<: *spring-config
+    command: python main.py
+    container_name: demo1-python
+
   demo1-movie:
     build:
       context: ./movie
