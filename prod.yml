@@ -71,18 +71,18 @@ services:
       - 5672:5672
       - 15672:15672
 
-  # demo1-user:
-  #   build:
-  #     context: ./user
-  #     dockerfile: ./Dockerfile
-  #   image: demo1-user
-  #   ports:
-  #     - 8010:8010
-  #   depends_on:
-  #     - demo1-config
-  #     - demo1-postgres
-  #   <<: *spring-config
-  #   command: bash -c "./wait-for-it.sh demo1-config:8011 && ./wait-for-it.sh demo1-postgres:5432 -- java -jar user.jar"
+  demo1-user:
+    build:
+      context: ./user
+      dockerfile: ./Dockerfile
+    image: demo1-user
+    ports:
+      - 8010:8010
+    depends_on:
+      - demo1-config
+      - demo1-postgres
+    <<: *spring-config
+    command: bash -c "./wait-for-it.sh demo1-config:8011 && ./wait-for-it.sh demo1-postgres:5432 -- java -jar user.jar"
 
   demo1-category:
     build:
@@ -113,14 +113,14 @@ services:
     command: ./wait-for-it.sh demo1-category:8081 -- java -jar movie.jar
     container_name: demo1-movie
 
-  # demo1-python:
-  #   build:
-  #     context: ./python
-  #     dockerfile: ./Dockerfile
-  #   image: demo1-python
-  #   ports:
-  #     - 8012:8012
-  #   depends_on:
-  #     - demo1-discovery
-  #   command: python main.py
-  #   container_name: demo1-python
+  demo1-python:
+    build:
+      context: ./python
+      dockerfile: ./Dockerfile
+    image: demo1-python
+    ports:
+      - 8012:8012
+    depends_on:
+      - demo1-discovery
+    command: python main.py
+    container_name: demo1-python
